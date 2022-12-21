@@ -86,6 +86,9 @@ get_filename_component(RAPIDXML_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/../ThirdPa
 function(add_link_directory_if_exists dir)
   if(EXISTS "${dir}")
     link_directories("${dir}")
+    message(STATUS "*********** OK ${dir}")
+  else()
+    message(STATUS "*********** XX ${dir}")
   endif()
 endfunction()
 
