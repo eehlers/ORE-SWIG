@@ -13,11 +13,11 @@
 
 cd C:\erik\ORE\repos\oreplus\ore\build
 "C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 17 2022" -A x64 ..
--> C:\erik\ORE\repos\oreplus\ore\build\ORE\repos\ore\build\ORE.sln
+-> C:\erik\ORE\repos\oreplus\ore\build\ORE.sln
 
 2.1.1 Build using Visual Studio
 
-C:\erik\ORE\repos\oreplus\ore\build\ORE\repos\ore\build\ORE.sln
+C:\erik\ORE\repos\oreplus\ore\build\ORE.sln
 -> C:\erik\ORE\repos\oreplus\ore\build\OREAnalytics\orea\Release\OREAnalytics-x64-mt.lib
 
 2.1.2 Build using cmake
@@ -25,12 +25,6 @@ C:\erik\ORE\repos\oreplus\ore\build\ORE\repos\ore\build\ORE.sln
 cd C:\erik\ORE\repos\oreplus\ore\build
 "C:\Program Files\CMake\bin\cmake.exe" --build . --config Release
 -> C:\erik\ORE\repos\oreplus\ore\build\OREAnalytics\orea\Release\OREAnalytics-x64-mt.lib
-
-2.1 Alternately you can use Visual Studio to build the manually maintained
-solution file, however this outputs the lib file to the wrong directory:
-
-C:\erik\ORE\repos\oreplus\ore\oreEverything.sln
--> C:\erik\ORE\repos\oreplus\ore\OREAnalytics\lib\OREAnalytics-x64-mt.lib
 
 3. Build QuantLib
 =================
@@ -49,8 +43,6 @@ cd C:\erik\ORE\repos\oreswig.gitlab\buildQuantExt-SWIG
 -D BOOST_ROOT=C:\erik\ORE\repos\boost_1_72_0 ^
 -S C:\erik\ORE\repos\oreswig.gitlab\QuantExt-SWIG\Python
 -> C:\erik\ORE\repos\oreswig.gitlab\buildQuantExt-SWIG\QuantExt-Python.sln
-
-Both of the two build methods below consume the output from 2.1 (not 2.2):
 
 4.1.1 Build the pyd file using Visual Studio
 
@@ -126,8 +118,6 @@ cd C:\erik\ORE\repos\oreswig.gitlab\buildOREAnalytics-SWIG
 -D BOOST_ROOT=C:\erik\ORE\repos\boost_1_72_0 ^
 -S C:\erik\ORE\repos\oreswig.gitlab\OREAnalytics-SWIG\Python
 -> C:\erik\ORE\repos\oreswig.gitlab\buildOREAnalytics-SWIG\OREAnalytics-Python.sln
-
-Both of the two build methods below consume the output from 2.1 (not 2.2):
 
 7.1.1 Build the pyd file using Visual Studio
 
