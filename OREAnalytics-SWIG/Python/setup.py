@@ -17,7 +17,7 @@ from distutils import sysconfig
 
 class test(Command):
     # Original version of this class posted
-    # by Berthold H�llmann to distutils-sig@python.org
+    # by Berthold Hoellmann to distutils-sig@python.org
     description = "test the distribution prior to install"
 
     user_options = [
@@ -179,11 +179,12 @@ class my_build_ext(build_ext):
                     extra_compile_args.append('/MD')
 
         elif compiler == 'unix':
-            os.chdir('..')
+            #import pdb; pdb.set_trace()
+            #os.chdir('..')
             ql_compile_args = \
-                os.popen('. ./oreanalytics-config --cflags').read()[:-1].split()
+                os.popen('../oreanalytics-config --cflags').read()[:-1].split()
             ql_link_args = \
-                os.popen('. ./oreanalytics-config --libs').read()[:-1].split()
+                os.popen('../oreanalytics-config --libs').read()[:-1].split()
 
             self.define += [ (arg[2:],None) for arg in ql_compile_args
                              if arg.startswith('-D') ]
@@ -217,22 +218,22 @@ class my_build_ext(build_ext):
             ext.extra_link_args = ext.extra_link_args or []
             ext.extra_link_args += extra_link_args
 
-if os.name == 'posix':
-    # changes the compiler from gcc to g++
-    save_init_posix = sysconfig._init_posix
-    def my_init_posix():
-        save_init_posix()
-        g = sysconfig._config_vars
-        if 'CXX' in os.environ:
-            g['CC'] = os.environ['CXX']
-        else:
-            g['CC'] = 'g++'
-        if sys.platform.startswith("darwin"):
-            g['LDSHARED'] = g['CC'] + \
-                            ' -bundle -flat_namespace -undefined suppress'
-        else:
-            g['LDSHARED'] = g['CC'] + ' -shared'
-    sysconfig._init_posix = my_init_posix
+#if os.name == 'posix':
+#    # changes the compiler from gcc to g++
+#    save_init_posix = sysconfig._init_posix
+#    def my_init_posix():
+#        save_init_posix()
+#        g = sysconfig._config_vars
+#        if 'CXX' in os.environ:
+#            g['CC'] = os.environ['CXX']
+#        else:
+#            g['CC'] = 'g++'
+#        if sys.platform.startswith("darwin"):
+#            g['LDSHARED'] = g['CC'] + \
+#                            ' -bundle -flat_namespace -undefined suppress'
+#        else:
+#            g['LDSHARED'] = g['CC'] + ' -shared'
+#    sysconfig._init_posix = my_init_posix
 
 datafiles  = []
 
@@ -270,7 +271,7 @@ framework for quantitative finance.
       author           = "Quaternion Risk Management",
       author_email     = "info@quaternion.com",
       url              = "http://quaternion.com",
-      license          = codecs.open('../../LICENSE.TXT','r+',
+      license          = codecs.open('../../LICENSE.txt','r+',
                                      encoding='utf8').read(),
       classifiers      = classifiers,
       py_modules       = ['OREAnalytics.__init__','OREAnalytics.OREAnalytics'],
