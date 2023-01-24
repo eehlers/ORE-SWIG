@@ -54,7 +54,77 @@ cd $DEMO_ORE_DIR/build
 cmake --build .
 -> $DEMO_ORE_DIR/build/OREAnalytics/orea/libOREAnalytics.so
 
-3. Build QuantLib
+3. BUild OREAnalytics
+=====================
+
+3.1 Use cmake to generate the project files
+
+cd $DEMO_ORE_SWIG_DIR
+mkdir buildOREAnalytics-SWIG
+cd $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG
+cmake -DBOOST_ROOT=$DEMO_BOOST_DIR -DORE=$DEMO_ORE_DIR -S$DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python -Wno-dev
+-> $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG/Makefile
+
+3.1.1 EITHER Build the pyd file using make
+
+cd $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG
+make # swap space
+-> $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG/_OREAnalytics.so
+
+3.1.2 OR Build the pyd file using cmake
+
+cd $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG
+cmake --build .
+-> $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG/_OREAnalytics.so
+
+3.2 Build and use the wrapper
+
+3.2.1 Build the wrapper
+
+cd $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python
+#export BOOST_ROOT=$DEMO_BOOST_DIR
+#export BOOST_LIB=$DEMO_BOOST_DIR/stage/lib
+export ORE=$DEMO_ORE_DIR
+export BOOST=$DEMO_BOOST_DIR
+python3 setup.py wrap
+python3 setup.py build # swap space
+-> $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/build/lib.linux-x86_64-3.10/OREAnalytics/_OREAnalytics.cpython-310-x86_64-linux-gnu.so
+
+3.2.1 Use the wrapper
+
+cd $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/Examples
+export PYTHONPATH=$DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/build/lib.linux-x86_64-3.10/OREAnalytics
+export LD_LIBRARY_PATH=$DEMO_ORE_DIR/build/OREAnalytics/orea:$DEMO_ORE_DIR/build/OREData/ored:$DEMO_ORE_DIR/build/QuantExt/qle:$DEMO_ORE_DIR/build/QuantLib/ql:/home/erik/quaternion/boost_1_81_0/stage/lib
+python3 swap.py -> segmentation fault
+
+3.3.1 Build the wheel
+
+sudo apt install python3.10-venv
+sudo apt install python3-pip
+pip install build
+cd $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python
+#export BOOST_ROOT=$DEMO_BOOST_DIR
+#export BOOST_LIB=$DEMO_BOOST_DIR\lib\x64\lib
+export ORE=$DEMO_ORE_DIR
+#export PATH=$PATH;$DEMO_SWIG_DIR
+#export PATH=C:\Users\eric.ehlers\AppData\Local\Programs\Python\Python310\Scripts;$PATH
+python3 -m build --wheel
+-> $DEMO_ORE_SWIG_DIR\OREAnalytics-SWIG\Python\dist\OREAnalytics_Python-1.8.3.2-cp310-cp310-win_amd64.whl
+
+3.3.2 Use the wheel
+
+python3 -m venv env1
+. ./env1/bin/activate
+pip install $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/dist/OREAnalytics_Python-1.8.3.2-cp310-cp310-linux_x86_64.whl
+python $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/Examples/commodityforward.py
+
+===============================================================================
+NB: The build above for ORE includes the build of QuantLib and QuantExt.  Below
+are instructions for building QuantLib and QuantExt standalone which may be
+helpful for troubleshooting or other purposes.
+===============================================================================
+
+4. Build QuantLib
 =================
 
 # build QL
@@ -81,10 +151,10 @@ export PYTHONPATH=$DEMO_ORE_SWIG_DIR/QuantLib-SWIG/Python/build/lib.linux-x86_64
 export LD_LIBRARY_PATH=$DEMO_ORE_DIR/QuantLib/ql/.libs:/home/erik/quaternion/boost_1_81_0/stage/lib
 python3 swap.py
 
-4. Build QuantExt
+5. Build QuantExt
 =================
 
-4.1 Use cmake to generate the project files
+5.1 Use cmake to generate the project files
 
 cd $DEMO_ORE_SWIG_DIR
 mkdir buildQuantExt-SWIG
@@ -92,21 +162,21 @@ cd $DEMO_ORE_SWIG_DIR/buildQuantExt-SWIG
 cmake -DORE:PATHNAME=$DEMO_ORE_DIR -DBOOST_ROOT=$DEMO_BOOST_DIR -S$DEMO_ORE_SWIG_DIR/QuantExt-SWIG/Python
 -> $DEMO_ORE_SWIG_DIR/buildQuantExt-SWIG/Makefile
 
-4.1.1 EITHER Build the pyd file using make
+5.1.1 EITHER Build the pyd file using make
 
 cd $DEMO_ORE_SWIG_DIR/buildQuantExt-SWIG
 make
 -> $DEMO_ORE_SWIG_DIR/buildQuantExt-SWIG/_QuantExt.so
 
-4.1.2 OR Build the pyd file using cmake
+5.1.2 OR Build the pyd file using cmake
 
 cd $DEMO_ORE_SWIG_DIR/buildQuantExt-SWIG
 cmake --build .
 -> $DEMO_ORE_SWIG_DIR/buildQuantExt-SWIG/_QuantExt.so
 
-4.2 Build and use the wrapper
+5.2 Build and use the wrapper
 
-4.2.1 Build the wrapper
+5.2.1 Build the wrapper
 
 cd $DEMO_ORE_SWIG_DIR/QuantExt-SWIG/Python
 #export BOOST_ROOT=$DEMO_BOOST_DIR
@@ -118,12 +188,12 @@ python3 setup.py build -> FAILS **************************************
 -> $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310\QuantExt
 python setup.py test (FAILS)
 
-4.2.1 Use the wrapper
+5.2.1 Use the wrapper
 
 set PYTHONPATH=$DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310
 python $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\Examples\commodityforward.py
 
-4.3.1 Build the wheel
+5.3.1 Build the wheel
 
 cd $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python
 set BOOST_ROOT=$DEMO_BOOST_DIR
@@ -135,86 +205,12 @@ set PATH=C:\Users\eric.ehlers\AppData\Local\Programs\Python\Python310\Scripts;$P
 python -m build --wheel
 -> $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\dist\QuantExt_Python-1.8.7-cp310-cp310-win_amd64.whl
 
-4.3.2 Use the wheel
+5.3.2 Use the wheel
 
 python -m venv env1
 .\env1\Scripts\activate.bat
 pip install $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\dist\QuantExt_Python-1.8.7-cp310-cp310-win_amd64.whl
 python $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\Examples\commodityforward.py
-
-5. Build OREData-SWIG
-=====================
-
-WIP
-
-6. Build OREPlus-SWIG
-=====================
-
-WIP
-
-7. BUild OREAnalytics
-=====================
-
-7.1 Use cmake to generate the project files
-
-cd $DEMO_ORE_SWIG_DIR
-mkdir buildOREAnalytics-SWIG
-cd $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG
-cmake -DBOOST_ROOT=$DEMO_BOOST_DIR -DORE=$DEMO_ORE_DIR -S$DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python -Wno-dev
--> $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG/Makefile
-
-7.1.1 EITHER Build the pyd file using make
-
-cd $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG
-make # swap space
--> $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG/_OREAnalytics.so
-
-7.1.2 OR Build the pyd file using cmake
-
-cd $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG
-cmake --build .
--> $DEMO_ORE_SWIG_DIR/buildOREAnalytics-SWIG/_OREAnalytics.so
-
-7.2 Build and use the wrapper
-
-7.2.1 Build the wrapper
-
-cd $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python
-#export BOOST_ROOT=$DEMO_BOOST_DIR
-#export BOOST_LIB=$DEMO_BOOST_DIR/stage/lib
-export ORE=$DEMO_ORE_DIR
-export BOOST=$DEMO_BOOST_DIR
-python3 setup.py wrap
-python3 setup.py build # swap space
--> $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/build/lib.linux-x86_64-3.10/OREAnalytics/_OREAnalytics.cpython-310-x86_64-linux-gnu.so
-
-7.2.1 Use the wrapper
-
-cd $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/Examples
-export PYTHONPATH=$DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/build/lib.linux-x86_64-3.10/OREAnalytics
-export LD_LIBRARY_PATH=$DEMO_ORE_DIR/build/OREAnalytics/orea:$DEMO_ORE_DIR/build/OREData/ored:$DEMO_ORE_DIR/build/QuantExt/qle:$DEMO_ORE_DIR/build/QuantLib/ql:/home/erik/quaternion/boost_1_81_0/stage/lib
-python3 swap.py -> segmentation fault
-
-7.3.1 Build the wheel
-
-sudo apt install python3.10-venv
-sudo apt install python3-pip
-pip install build
-cd $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python
-#export BOOST_ROOT=$DEMO_BOOST_DIR
-#export BOOST_LIB=$DEMO_BOOST_DIR\lib\x64\lib
-export ORE=$DEMO_ORE_DIR
-#export PATH=$PATH;$DEMO_SWIG_DIR
-#export PATH=C:\Users\eric.ehlers\AppData\Local\Programs\Python\Python310\Scripts;$PATH
-python3 -m build --wheel
--> $DEMO_ORE_SWIG_DIR\OREAnalytics-SWIG\Python\dist\OREAnalytics_Python-1.8.3.2-cp310-cp310-win_amd64.whl
-
-7.3.2 Use the wheel
-
-python3 -m venv env1
-. ./env1/bin/activate
-pip install $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/dist/OREAnalytics_Python-1.8.3.2-cp310-cp310-linux_x86_64.whl
-python $DEMO_ORE_SWIG_DIR/OREAnalytics-SWIG/Python/Examples/commodityforward.py
 
 TODO
 ====

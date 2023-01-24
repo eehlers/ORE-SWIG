@@ -110,12 +110,12 @@ class my_build_ext(build_ext):
         if v in os.environ:
             return os.getenv(v)
         else:
-            raise Error("Environment variable {} not set".format(v))
+            raise Exception("Environment variable {} not set".format(v))
     def validate_path(self, p):
         if os.path.exists(p):
             return p
         else:
-            raise Error("Invalid path: {}".format(p))
+            raise Exception("Invalid path: {}".format(p))
     def finalize_options(self):
         build_ext.finalize_options(self)
         self.set_undefined_options('build', ('static','static'))
@@ -144,10 +144,10 @@ class my_build_ext(build_ext):
 
             # ADD LIBRARY DIRECTORIES
             self.library_dirs.append(self.validate_path(BOOST_LIB))
-            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'QuantLib', 'lib')))
-            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'QuantExt', 'lib')))
-            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'OREData', 'lib')))
-            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'OREAnalytics', 'lib')))
+            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'build', 'QuantLib', 'ql', 'Release')))
+            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'build', 'QuantExt', 'qle', 'Release')))
+            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'build', 'OREData', 'ored', 'Release')))
+            self.library_dirs.append(self.validate_path(os.path.join(ORE_DIR, 'build', 'OREAnalytics', 'orea', 'Release')))
 
             #if 'INCLUDE' in os.environ:
             #    dirs = [dir for dir in os.environ['INCLUDE'].split(';')]
