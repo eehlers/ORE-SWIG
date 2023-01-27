@@ -25,8 +25,10 @@ ore-swig\OREAnalytics-SWIG\README
 
 For purposes of this HOWTO, set the following environment variables to the paths where the above items live on your machine, e.g:
 
-SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
 SET DEMO_BOOST_DIR=C:\erik\ORE\repos\boost_1_72_0
+SET DEMO_BOOST_DIR=C:\local\boost
+
+SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
 SET DEMO_ORE_DIR=C:\erik\ORE\repos\ore.eehlers
 SET DEMO_ORE_SWIG_DIR=C:\erik\ORE\repos\oreswig.eehlers
 
@@ -52,70 +54,39 @@ cd %DEMO_ORE_DIR%\build
 "C:\Program Files\CMake\bin\cmake.exe" --build . --config Release
 -> %DEMO_ORE_DIR%\build\OREAnalytics\orea\Release\OREAnalytics-x64-mt.lib
 
-3. Build ORESWIG
-================
+3. Build ORE-SWIG
+=================
 
-3.1 Use cmake to generate the project files
-
-cd %DEMO_ORE_SWIG_DIR%
-mkdir buildOREAnalytics-SWIG
-cd %DEMO_ORE_SWIG_DIR%\buildOREAnalytics-SWIG
-"C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 17 2022" ^
--A x64 ^
--D SWIG_DIR=%DEMO_SWIG_DIR%\Lib ^
--D SWIG_EXECUTABLE=%DEMO_SWIG_DIR%\swig.exe ^
--D ORE:PATHNAME=%DEMO_ORE_DIR% ^
--D BOOST_ROOT=%DEMO_BOOST_DIR% ^
--S %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python
--> %DEMO_ORE_SWIG_DIR%\buildOREAnalytics-SWIG\OREAnalytics-Python.sln
-
-3.1.1 EITHER Build the pyd file using Visual Studio
-
-%DEMO_ORE_SWIG_DIR%\buildOREAnalytics-SWIG\OREAnalytics-Python.sln
--> %DEMO_ORE_SWIG_DIR%\buildOREAnalytics-SWIG\Release\_OREAnalytics.pyd
-
-3.1.2 OR Build the pyd file using cmake
-
-cd %DEMO_ORE_SWIG_DIR%\buildOREAnalytics-SWIG
-"C:\Program Files\CMake\bin\cmake.exe" --build . --config Release
--> %DEMO_ORE_SWIG_DIR%\buildOREAnalytics-SWIG\Release\_OREAnalytics.pyd
-
-3.2 Build and use the wrapper
-
-3.2.1 Build the wrapper
+3.1 Build ORE-SWIG (wrapper and wheel)
 
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python
 set BOOST_ROOT=%DEMO_BOOST_DIR%
-set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+#set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+set BOOST_LIB=%DEMO_BOOST_DIR%\lib64-msvc-14.3
 set ORE_DIR=%DEMO_ORE_DIR%
 set PATH=%PATH%;%DEMO_SWIG_DIR%
 python setup.py wrap
 python setup.py build
+python setup.py test
+#pip install build
+python -m build --wheel
 
-3.2.1 Use the wrapper
+3.2 Use the wrapper
 
-set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\build\lib.win-amd64-cpython-310
 cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\Examples
+set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\build\lib.win-amd64-cpython-310
 python commodityforward.py
 
-3.3.1 Build the wheel
+3.3 Use the wheel
 
-cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python
-set BOOST_ROOT=%DEMO_BOOST_DIR%
-set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
-set ORE_DIR=%DEMO_ORE_DIR%
-set PATH=%PATH%;%DEMO_SWIG_DIR%
-set PATH=C:\Users\eric.ehlers\AppData\Local\Programs\Python\Python310\Scripts;%PATH%
-python -m build --wheel
--> %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\dist\OREAnalytics_Python-1.8.3.2-cp310-cp310-win_amd64.whl
-
-3.3.2 Use the wheel
-
+cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\Examples
 python -m venv env1
 .\env1\Scripts\activate.bat
 pip install %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\dist\OREAnalytics_Python-1.8.3.2-cp310-cp310-win_amd64.whl
-python %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\Examples\commodityforward.py
+python commodityforward.py
+deactivate
+rmdir /s /q env1
 
 ===============================================================================
 NB: The build above for ORE includes the build of QuantLib and QuantExt.  Below
@@ -135,12 +106,13 @@ helpful for troubleshooting or other purposes.
 
 cd %DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python
 set PATH=%PATH%;%DEMO_SWIG_DIR%
-python setup.py wrap
 set QL_DIR=%DEMO_ORE_DIR%\QuantLib
 set INCLUDE=%DEMO_BOOST_DIR%
 set LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+python setup.py wrap
 python setup.py build
 python setup.py test
+#pip install build
 python -m build --wheel
 
 4.3 Use the wrapper
@@ -162,67 +134,41 @@ rmdir /s /q env1
 5. Build QuantExt
 =================
 
-5.1 Use cmake to generate the project files
+5.1 Build QuantExt
 
-cd %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG
-"C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 17 2022" ^
--A x64 ^
--D SWIG_DIR=%DEMO_SWIG_DIR%\Lib ^
--D SWIG_EXECUTABLE=%DEMO_SWIG_DIR%\swig.exe ^
--D ORE:PATHNAME=%DEMO_ORE_DIR% ^
--D BOOST_ROOT=%DEMO_BOOST_DIR% ^
--S %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
--> %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\QuantExt-Python.sln
+# TODO: HOWTO for building QLE w/native tools
+-> %DEMO_ORE_DIR%\QuantExt\lib\QuantExt-x64-mt.lib
 
-5.1.1 EITHER Build the pyd file using Visual Studio
-
-%DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\QuantExt-Python.sln
--> %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\Release\_QuantExt.pyd
-
-5.1.2 OR Build the pyd file using cmake
-
-cd %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG
-"C:\Program Files\CMake\bin\cmake.exe" --build . --config Release
--> %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\Release\_QuantExt.pyd
-
-5.2 Build and use the wrapper
-
-5.2.1 Build the wrapper
+5.1 Build QuantExt-SWIG (wrapper and wheel)
 
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
 set BOOST_ROOT=%DEMO_BOOST_DIR%
-set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+#set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+set BOOST_LIB=%DEMO_BOOST_DIR%\lib64-msvc-14.3
 set ORE_DIR=%DEMO_ORE_DIR%
 set PATH=%PATH%;%DEMO_SWIG_DIR%
 python setup.py wrap
 python setup.py build
--> %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310\QuantExt
 python setup.py test (FAILS)
-
-5.2.1 Use the wrapper
-
-set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310
-python %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples\commodityforward.py
-
-5.3.1 Build the wheel
-
-cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
-set BOOST_ROOT=%DEMO_BOOST_DIR%
-set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
-set ORE_DIR=%DEMO_ORE_DIR%
-set PATH=%PATH%;%DEMO_SWIG_DIR%
-set PATH=C:\Users\eric.ehlers\AppData\Local\Programs\Python\Python310\Scripts;%PATH%
 #pip install build
 python -m build --wheel
--> %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\dist\QuantExt_Python-1.8.7-cp310-cp310-win_amd64.whl
 
-5.3.2 Use the wheel
+5.2 Use the wrapper
 
+cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples
+set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310
+python commodityforward.py
+
+5.3 Use the wheel
+
+cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples
 python -m venv env1
 .\env1\Scripts\activate.bat
 pip install %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\dist\QuantExt_Python-1.8.7-cp310-cp310-win_amd64.whl
-python %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples\commodityforward.py
+python commodityforward.py
+deactivate
+rmdir /s /q env1
 
 TODO
 ====
@@ -233,3 +179,4 @@ TODO
 - "python setup.py test" fails
 
 - many example py scripts do not work
+

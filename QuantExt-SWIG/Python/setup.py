@@ -106,12 +106,12 @@ class my_build_ext(build_ext):
         if v in os.environ:
             return os.getenv(v)
         else:
-            raise Error("Environment variable {} not set".format(v))
+            raise Exception("Environment variable {} not set".format(v))
     def validate_path(self, p):
         if os.path.exists(p):
             return p
         else:
-            raise Error("Invalid path: {}".format(p))
+            raise Exception("Invalid path: {}".format(p))
     def finalize_options(self):
         build_ext.finalize_options(self)
         self.set_undefined_options('build', ('static','static'))
