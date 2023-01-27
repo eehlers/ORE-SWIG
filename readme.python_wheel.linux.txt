@@ -127,13 +127,15 @@ helpful for troubleshooting or other purposes.
 4. Build QuantLib
 =================
 
-# build QL
+4.1 Build Quantlib
+
 cd $DEMO_ORE_DIR/QuantLib
 ./autogen.sh
 ./configure --with-boost-include=$DEMO_BOOST_DIR --with-boost-lib=$DEMO_BOOST_DIR/stage/lib
 make
 
-# build QL SWIG
+4.2 Build Quantlib-SWIG (wrapper and wheel)
+
 cd $DEMO_ORE_SWIG_DIR/QuantLib-SWIG
 ./autogen.sh
 ./configure
@@ -142,14 +144,26 @@ cd $DEMO_ORE_SWIG_DIR/QuantLib-SWIG/Python
 export PATH=$PATH:$DEMO_ORE_DIR/QuantLib
 export CXXFLAGS=-I$DEMO_ORE_DIR/QuantLib
 export LDFLAGS=-L$DEMO_ORE_DIR/QuantLib/ql/.libs
-python3 setup.py wrap
-python3 setup.py build
+python3 setup.py wrap       # generate the wrapper
+python3 setup.py build      # build the wrapper
+python3 -m build --wheel    # build the wheel (untested)
 
-# use wrapper
+4.3 Use the wrapper
+
 cd $DEMO_ORE_SWIG_DIR/QuantLib-SWIG/Python/examples
 export PYTHONPATH=$DEMO_ORE_SWIG_DIR/QuantLib-SWIG/Python/build/lib.linux-x86_64-3.10/QuantLib
 export LD_LIBRARY_PATH=$DEMO_ORE_DIR/QuantLib/ql/.libs:/home/erik/quaternion/boost_1_81_0/stage/lib
 python3 swap.py
+
+4.4 Use the wheel (untested)
+
+cd $DEMO_ORE_SWIG_DIR/QuantLib-SWIG/Python/examples
+python -m venv env1
+.\env1\Scripts\activate.bat
+pip install $DEMO_ORE_SWIG_DIR\QuantExt-SWIG\Python\dist\QuantExt_Python-1.8.7-cp310-cp310-win_amd64.whl
+python swap.py
+deactivate
+rm -rf env1
 
 5. Build QuantExt
 =================

@@ -52,8 +52,8 @@ cd %DEMO_ORE_DIR%\build
 "C:\Program Files\CMake\bin\cmake.exe" --build . --config Release
 -> %DEMO_ORE_DIR%\build\OREAnalytics\orea\Release\OREAnalytics-x64-mt.lib
 
-3. BUild OREAnalytics
-=====================
+3. Build ORESWIG
+================
 
 3.1 Use cmake to generate the project files
 
@@ -117,16 +117,52 @@ python -m venv env1
 pip install %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\dist\OREAnalytics_Python-1.8.3.2-cp310-cp310-win_amd64.whl
 python %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\Examples\commodityforward.py
 
-======================================================================
-NB: The build above for ORE includes the build of QuantExt.  Below are
-instructions for building QuantExt standalone which may be helpful for
-troubleshooting or other purposes.
-======================================================================
+===============================================================================
+NB: The build above for ORE includes the build of QuantLib and QuantExt.  Below
+are instructions for building QuantLib and QuantExt standalone which may be
+helpful for troubleshooting or other purposes.
+===============================================================================
 
-4. Build QuantExt
+4. Build QuantLib
 =================
 
-4.1 Use cmake to generate the project files
+4.1 Build Quantlib
+
+# TODO: HOWTO for building QL w/native tools
+-> %DEMO_ORE_DIR%\QuantLib\lib\QuantLib-x64-mt.lib
+
+4.2 Build Quantlib-SWIG (wrapper and wheel)
+
+cd %DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python
+set PATH=%PATH%;%DEMO_SWIG_DIR%
+python setup.py wrap
+set QL_DIR=%DEMO_ORE_DIR%\QuantLib
+set INCLUDE=%DEMO_BOOST_DIR%
+set LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+python setup.py build
+python setup.py test
+python -m build --wheel
+
+4.3 Use the wrapper
+
+cd %DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python\examples
+set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python\build\lib.win-amd64-cpython-310
+python swap.py
+
+4.4 Use the wheel
+
+cd %DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python\examples
+python -m venv env1
+.\env1\Scripts\activate.bat
+pip install %DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python\dist\QuantLib-1.28-cp310-cp310-win_amd64.whl
+python swap.py
+deactivate
+rmdir /s /q env1
+
+5. Build QuantExt
+=================
+
+5.1 Use cmake to generate the project files
 
 cd %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG
 "C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 17 2022" ^
@@ -138,20 +174,20 @@ cd %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG
 -S %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
 -> %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\QuantExt-Python.sln
 
-4.1.1 EITHER Build the pyd file using Visual Studio
+5.1.1 EITHER Build the pyd file using Visual Studio
 
 %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\QuantExt-Python.sln
 -> %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\Release\_QuantExt.pyd
 
-4.1.2 OR Build the pyd file using cmake
+5.1.2 OR Build the pyd file using cmake
 
 cd %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG
 "C:\Program Files\CMake\bin\cmake.exe" --build . --config Release
 -> %DEMO_ORE_SWIG_DIR%\buildQuantExt-SWIG\Release\_QuantExt.pyd
 
-4.2 Build and use the wrapper
+5.2 Build and use the wrapper
 
-4.2.1 Build the wrapper
+5.2.1 Build the wrapper
 
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
@@ -164,12 +200,12 @@ python setup.py build
 -> %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310\QuantExt
 python setup.py test (FAILS)
 
-4.2.1 Use the wrapper
+5.2.1 Use the wrapper
 
 set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310
 python %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples\commodityforward.py
 
-4.3.1 Build the wheel
+5.3.1 Build the wheel
 
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
 set BOOST_ROOT=%DEMO_BOOST_DIR%
@@ -181,7 +217,7 @@ set PATH=C:\Users\eric.ehlers\AppData\Local\Programs\Python\Python310\Scripts;%P
 python -m build --wheel
 -> %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\dist\QuantExt_Python-1.8.7-cp310-cp310-win_amd64.whl
 
-4.3.2 Use the wheel
+5.3.2 Use the wheel
 
 python -m venv env1
 .\env1\Scripts\activate.bat
