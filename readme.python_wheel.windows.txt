@@ -15,6 +15,12 @@ ore-swig\OREAnalytics-SWIG\README
 
 1.2 Prerequisites
 
+- python - This HOWTO will require you to have the following tools up to date:
+
+#sudo apt install python3.10-venv
+#sudo apt install python3-pip
+pip install build
+
 - boost and swig: You need to either install the binaries,
   or install the source code and build yourself
 
@@ -75,7 +81,6 @@ set ORE_STATIC_RUNTIME=1
 python setup.py wrap
 python setup.py build
 python setup.py test
-#pip install build
 python -m build --wheel
 
 3.2 Use the wrapper
@@ -118,7 +123,6 @@ set LIB=%DEMO_BOOST_LIB%
 python setup.py wrap
 python setup.py build
 python setup.py test
-#pip install build
 python -m build --wheel
 
 4.3 Use the wrapper
@@ -145,7 +149,7 @@ rmdir /s /q env1
 # TODO: HOWTO for building QLE w/native tools
 -> %DEMO_ORE_DIR%\QuantExt\lib\QuantExt-x64-mt.lib
 
-5.1 Build QuantExt-SWIG (wrapper and wheel)
+5.2 Build QuantExt-SWIG (wrapper and wheel)
 
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
@@ -156,16 +160,15 @@ set PATH=%PATH%;%DEMO_SWIG_DIR%
 python setup.py wrap
 python setup.py build
 python setup.py test (FAILS)
-#pip install build
 python -m build --wheel
 
-5.2 Use the wrapper
+5.3 Use the wrapper
 
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples
 set PYTHONPATH=%DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\build\lib.win-amd64-cpython-310
 python commodityforward.py
 
-5.3 Use the wheel
+5.4 Use the wheel
 
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python\Examples
 python -m venv env1
