@@ -25,12 +25,17 @@ ore-swig\OREAnalytics-SWIG\README
 
 For purposes of this HOWTO, set the following environment variables to the paths where the above items live on your machine, e.g:
 
-SET DEMO_BOOST_DIR=C:\erik\ORE\repos\boost_1_72_0
-SET DEMO_BOOST_DIR=C:\local\boost
-
+SET DEMO_BOOST_ROOT=C:\erik\ORE\repos\boost_1_72_0
+SET DEMO_BOOST_LIB=C:\erik\ORE\repos\boost_1_72_0\lib\x64\lib
 SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
 SET DEMO_ORE_DIR=C:\erik\ORE\repos\ore.eehlers
 SET DEMO_ORE_SWIG_DIR=C:\erik\ORE\repos\oreswig.eehlers
+
+SET DEMO_BOOST_ROOT=C:\local\boost
+SET DEMO_BOOST_LIB=C:\local\boost\lib64-msvc-14.3
+SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
+SET DEMO_ORE_DIR=C:\local\ore
+SET DEMO_ORE_SWIG_DIR=C:\local\oreswig
 
 2. Build ORE
 ============
@@ -40,7 +45,8 @@ SET DEMO_ORE_SWIG_DIR=C:\erik\ORE\repos\oreswig.eehlers
 cd %DEMO_ORE_DIR%
 mkdir build
 cd %DEMO_ORE_DIR%\build
-"C:\Program Files\CMake\bin\cmake.exe" -G "Visual Studio 17 2022" -A x64 ..
+set BOOST_ROOT=%DEMO_BOOST_ROOT%
+"C:\Program Files\CMake\bin\cmake.exe" -DMSVC_LINK_DYNAMIC_RUNTIME=OFF -G "Visual Studio 17 2022" -A x64 ..
 -> %DEMO_ORE_DIR%\build\ORE.sln
 
 2.1.1 EITHER Build using Visual Studio
@@ -61,11 +67,11 @@ cd %DEMO_ORE_DIR%\build
 
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python
-set BOOST_ROOT=%DEMO_BOOST_DIR%
-#set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
-set BOOST_LIB=%DEMO_BOOST_DIR%\lib64-msvc-14.3
+set BOOST_ROOT=%DEMO_BOOST_ROOT%
+set BOOST_LIB=%DEMO_BOOST_LIB%
 set ORE_DIR=%DEMO_ORE_DIR%
 set PATH=%PATH%;%DEMO_SWIG_DIR%
+set ORE_STATIC_RUNTIME=1
 python setup.py wrap
 python setup.py build
 python setup.py test
@@ -107,8 +113,8 @@ helpful for troubleshooting or other purposes.
 cd %DEMO_ORE_SWIG_DIR%\QuantLib-SWIG\Python
 set PATH=%PATH%;%DEMO_SWIG_DIR%
 set QL_DIR=%DEMO_ORE_DIR%\QuantLib
-set INCLUDE=%DEMO_BOOST_DIR%
-set LIB=%DEMO_BOOST_DIR%\lib\x64\lib
+set INCLUDE=%DEMO_BOOST_ROOT%
+set LIB=%DEMO_BOOST_LIB%
 python setup.py wrap
 python setup.py build
 python setup.py test
@@ -143,9 +149,8 @@ rmdir /s /q env1
 
 "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\QuantExt-SWIG\Python
-set BOOST_ROOT=%DEMO_BOOST_DIR%
-#set BOOST_LIB=%DEMO_BOOST_DIR%\lib\x64\lib
-set BOOST_LIB=%DEMO_BOOST_DIR%\lib64-msvc-14.3
+set BOOST_ROOT=%DEMO_BOOST_ROOT%
+set BOOST_LIB=%DEMO_BOOST_LIB%
 set ORE_DIR=%DEMO_ORE_DIR%
 set PATH=%PATH%;%DEMO_SWIG_DIR%
 python setup.py wrap
