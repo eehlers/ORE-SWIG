@@ -17,8 +17,6 @@ ore-swig\OREAnalytics-SWIG\README
 
 - python - This HOWTO will require you to have the following tools up to date:
 
-#sudo apt install python3.10-venv
-#sudo apt install python3-pip
 pip install build
 
 - boost and swig: You need to either install the binaries,
@@ -36,12 +34,6 @@ SET DEMO_BOOST_LIB=C:\erik\ORE\repos\boost_1_72_0\lib\x64\lib
 SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
 SET DEMO_ORE_DIR=C:\erik\ORE\repos\ore.eehlers
 SET DEMO_ORE_SWIG_DIR=C:\erik\ORE\repos\oreswig.eehlers
-
-SET DEMO_BOOST_ROOT=C:\local\boost
-SET DEMO_BOOST_LIB=C:\local\boost\lib64-msvc-14.3
-SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
-SET DEMO_ORE_DIR=C:\local\ore
-SET DEMO_ORE_SWIG_DIR=C:\local\oreswig
 
 2. Build ORE
 ============
