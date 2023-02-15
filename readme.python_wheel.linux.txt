@@ -17,8 +17,7 @@ oreswig/OREAnalytics-SWIG/README
 
 - python - This HOWTO will require you to have the following tools up to date:
 
-sudo apt install python3.10-venv
-sudo apt install python3-pip
+python -m ensurepip
 pip install build
 
 - boost and swig: You need to either install the binaries,
