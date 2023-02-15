@@ -17,6 +17,7 @@ ore-swig\OREAnalytics-SWIG\README
 
 - python - This HOWTO will require you to have the following tools up to date:
 
+python -m ensurepip
 pip install build
 
 - boost and swig: You need to either install the binaries,
