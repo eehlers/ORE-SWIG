@@ -260,7 +260,7 @@ classifiers = [
     'Topic :: Scientific/Engineering',
 ]
 
-setup(name             = "OREAnalytics-Python",
+setup(name             = "osre",
       version          = "1.8.3.2",
       description      = "Python bindings for the OREAnalytics library",
       long_description = """
