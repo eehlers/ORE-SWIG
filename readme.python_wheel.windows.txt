@@ -30,8 +30,8 @@ pip install build
 
 For purposes of this HOWTO, set the following environment variables to the paths where the above items live on your machine, e.g:
 
-SET DEMO_BOOST_ROOT=C:\erik\ORE\repos\boost_1_72_0
-SET DEMO_BOOST_LIB=C:\erik\ORE\repos\boost_1_72_0\lib\x64\lib
+SET DEMO_BOOST_ROOT=C:\erik\ORE\repos\boost\boost_1_81_0
+SET DEMO_BOOST_LIB=C:\erik\ORE\repos\boost\boost_1_81_0\lib\x64\lib
 SET DEMO_SWIG_DIR=C:\erik\ORE\repos\swigwin-4.1.1
 SET DEMO_ORE_DIR=C:\erik\ORE\repos\ore.eehlers
 SET DEMO_ORE_SWIG_DIR=C:\erik\ORE\repos\oreswig.eehlers
@@ -44,8 +44,10 @@ SET DEMO_ORE_SWIG_DIR=C:\erik\ORE\repos\oreswig.eehlers
 cd %DEMO_ORE_DIR%
 mkdir build
 cd %DEMO_ORE_DIR%\build
-set BOOST_ROOT=%DEMO_BOOST_ROOT%
-"C:\Program Files\CMake\bin\cmake.exe" -DMSVC_LINK_DYNAMIC_RUNTIME=OFF -G "Visual Studio 17 2022" -A x64 ..
+#set BOOST_ROOT=%DEMO_BOOST_ROOT%
+set BOOST_INCLUDEDIR=%DEMO_BOOST_ROOT%
+set BOOST_LIBRARYDIR=%DEMO_BOOST_LIB%
+"C:\Program Files\CMake\bin\cmake.exe" -DMSVC_LINK_DYNAMIC_RUNTIME=OFF -DBoost_NO_WARN_NEW_VERSIONS=1 -Wno-dev -G "Visual Studio 17 2022" -A x64 ..
 -> %DEMO_ORE_DIR%\build\ORE.sln
 
 2.1.1 EITHER Build using Visual Studio
@@ -64,13 +66,14 @@ cd %DEMO_ORE_DIR%\build
 
 3.1 Build ORE-SWIG (wrapper and wheel)
 
-"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+#"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
 cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python
 set BOOST_ROOT=%DEMO_BOOST_ROOT%
 set BOOST_LIB=%DEMO_BOOST_LIB%
 set ORE_DIR=%DEMO_ORE_DIR%
 set PATH=%PATH%;%DEMO_SWIG_DIR%
 set ORE_STATIC_RUNTIME=1
+# NB the command below requires a version of setup.py that has been patched to look for ORE_STATIC_RUNTIME
 python setup.py wrap
 python setup.py build
 python setup.py test

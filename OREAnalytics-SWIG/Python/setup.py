@@ -168,12 +168,12 @@ class my_build_ext(build_ext):
             self.libraries = [ 'advapi32' ]
 
             if self.debug:
-                if self.static:
+                if self.static or 'ORE_STATIC_RUNTIME' in os.environ:
                     extra_compile_args.append('/MTd')
                 else:
                     extra_compile_args.append('/MDd')
             else:
-                if self.static:
+                if self.static or 'ORE_STATIC_RUNTIME' in os.environ:
                     extra_compile_args.append('/MT')
                 else:
                     extra_compile_args.append('/MD')
