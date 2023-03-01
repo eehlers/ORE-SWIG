@@ -27,7 +27,7 @@ pip install build
 - ore and oreswig: You need to install the source code.
   Instructions for building with cmake are provided below.
 
-1.3 Environmnet variables
+1.3 Environment variables
 
 For purposes of this HOWTO, set the following environment variables to the paths where the above items live on your machine, e.g:
 
@@ -43,7 +43,7 @@ DEMO_ORE_SWIG_DIR=/home/erik/quaternion/oreswig.eehlers
 cd $DEMO_ORE_DIR
 mkdir build
 cd $DEMO_ORE_DIR/build
-cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_DOC=OFF \
+cmake -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DORE_BUILD_DOC=OFF -DORE_BUILD_EXAMPLES=OFF -DORE_BUILD_TESTS=OFF -DORE_BUILD_APP=OFF \
 -DBoost_NO_WARN_NEW_VERSIONS=1 -DBoost_NO_SYSTEM_PATHS=1 -DBOOST_ROOT=$DEMO_BOOST_DIR ..
 -> $DEMO_ORE_DIR/build/Makefile
 BOOST_BIND_GLOBAL_PLACEHOLDERS
@@ -112,17 +112,19 @@ make
 
 4.2 Build Quantlib-SWIG (wrapper and wheel)
 
+# FIXME the commands below, are they redundant, and replicated by the wrap command that follows?
 cd $DEMO_ORE_SWIG_DIR/QuantLib-SWIG
 ./autogen.sh
 ./configure
 make -C Python
+
 cd $DEMO_ORE_SWIG_DIR/QuantLib-SWIG/Python
 export PATH=$PATH:$DEMO_ORE_DIR/QuantLib
 export CXXFLAGS=-I$DEMO_ORE_DIR/QuantLib
 export LDFLAGS=-L$DEMO_ORE_DIR/QuantLib/ql/.libs
 python3 setup.py wrap
 python3 setup.py build
-python -m build --wheel
+python3 -m build --wheel
 
 4.3 Use the wrapper
 
