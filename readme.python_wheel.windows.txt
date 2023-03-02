@@ -73,7 +73,7 @@ In order to do that:
 2) You need a special copy of setup.py which has been amended to read that environment variable.
    You can get the file here:
 
-https://github.com/eehlers/ORE-SWIG/blob/master/OREAnalytics-SWIG/Python/setup.py
+https://github.com/eehlers/ORE-SWIG/blob/QPR-11322/OREAnalytics-SWIG/Python/setup.py
 
    And you need to copy it to this location:
 
