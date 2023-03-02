@@ -66,14 +66,26 @@ cd %DEMO_ORE_DIR%\build
 
 3.1 Build ORE-SWIG (wrapper and wheel)
 
-#"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+===============================================================================
+NB: The step below builds the wrapper using the static runtime, so that end users have no dependencies.
+In order to do that:
+1) You need to set the variable ORE_STATIC_RUNTIME as noted below
+2) You need a special copy of setup.py which has been amended to read that environment variable.
+   You can get the file here:
+
+https://github.com/eehlers/ORE-SWIG/blob/master/OREAnalytics-SWIG/Python/setup.py
+
+   And you need to copy it to this location:
+
+%DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python\setup.py
+===============================================================================
+
 cd %DEMO_ORE_SWIG_DIR%\OREAnalytics-SWIG\Python
 set BOOST_ROOT=%DEMO_BOOST_ROOT%
 set BOOST_LIB=%DEMO_BOOST_LIB%
 set ORE_DIR=%DEMO_ORE_DIR%
 set PATH=%PATH%;%DEMO_SWIG_DIR%
 set ORE_STATIC_RUNTIME=1
-# NB the command below requires a version of setup.py that has been patched to look for ORE_STATIC_RUNTIME
 python setup.py wrap
 python setup.py build
 python setup.py test
